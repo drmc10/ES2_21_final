@@ -1,17 +1,24 @@
+import java.util.Calendar;
 import java.util.Date;
 
 public class Loan {
-    private int bookId;
+    private int bookHash;
     private Date issuedDate;
     private Date dateReturned;
     private Date dateToReturn;
     private boolean paidFine;
 
-    public Loan(int bookId) {
-        this.bookId = bookId;
-        this.issuedDate = null;
+    public Loan(int bookHash) {
+        Calendar calendar = Calendar.getInstance();
+
+        this.bookHash = bookHash;
+        this.issuedDate = new Date();
+
+        calendar.setTime(issuedDate);
+        calendar.add(Calendar.DAY_OF_MONTH, 14);
+
+        this.dateToReturn = calendar.getTime();
         this.dateReturned = null;
-        this.dateToReturn = null;
         this.paidFine = false;
     }
 
@@ -23,8 +30,8 @@ public class Loan {
         this.dateToReturn = newDate;
     }
 
-    public int getBookId() {
-        return bookId;
+    public int getBookHash() {
+        return bookHash;
     }
 
     public Date getIssuedDate() {

@@ -1,12 +1,6 @@
-import java.util.Date;
-
 public interface Ebook {
     int getSize();
-    String getHash();
-    String getIsbn();
+    int getHash();
     String getTitle();
-    String getAuthor();
-    String getLanguage();
     String getPublisher();
-    Date getReleaseDate();
 }

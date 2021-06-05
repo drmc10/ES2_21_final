@@ -1,14 +1,15 @@
-import java.util.Date;
-
 public class Pdf implements Ebook {
     private int size;
-    private String hash;
-    private String isbn;
+    private int hash;
     private String title;
-    private String author;
-    private String language;
     private String publisher;
-    private Date releaseDate;
+
+    public Pdf(String title, String publisher) {
+        this.title = title;
+        this.publisher = publisher;
+        this.hash = title.hashCode();
+        this.size = title.getBytes().length;
+    }
 
     @Override
     public int getSize() {
@@ -16,13 +17,8 @@ public class Pdf implements Ebook {
     }
 
     @Override
-    public String getHash() {
+    public int getHash() {
         return hash;
-    }
-
-    @Override
-    public String getIsbn() {
-        return isbn;
     }
 
     @Override
@@ -31,22 +27,7 @@ public class Pdf implements Ebook {
     }
 
     @Override
-    public String getAuthor() {
-        return author;
-    }
-
-    @Override
-    public String getLanguage() {
-        return language;
-    }
-
-    @Override
     public String getPublisher() {
         return publisher;
-    }
-
-    @Override
-    public Date getReleaseDate() {
-        return releaseDate;
     }
 }
