@@ -2,16 +2,35 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class User {
-    private String username;
-    private String password;
-    private String id;
-    private ArrayList<Loan> loanList;
+    private final String username;
+    private final String password;
+    private final String id;
+    private final ArrayList<Loan> loanList;
+    private boolean isActive;
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
-        this.loanList = new ArrayList<Loan>();
+        this.loanList = new ArrayList<>();
         this.id = UUID.randomUUID().toString();
+        this.isActive = true;
+    }
+
+    public User(String username, String password, Boolean isActive) {
+        this.username = username;
+        this.password = password;
+        this.loanList = new ArrayList<>();
+        this.id = UUID.randomUUID().toString();
+        this.isActive = isActive;
+    }
+
+    public User(String username, String password, Loan loanToAdd) {
+        this.username = username;
+        this.password = password;
+        this.loanList = new ArrayList<>();
+        this.id = UUID.randomUUID().toString();
+        this.isActive = true;
+        this.loanList.add(loanToAdd);
     }
 
     public String getUsername() {
@@ -32,5 +51,13 @@ public class User {
 
     public ArrayList<Loan> getLoanList() {
         return loanList;
+    }
+
+    public boolean isInactive() {
+        return !isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

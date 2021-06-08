@@ -22,6 +22,22 @@ public class Loan {
         this.paidFine = false;
     }
 
+    public Loan(int bookHash, Date currentDate) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+        calendar.add(Calendar.DAY_OF_MONTH, -28);
+
+        this.bookHash = bookHash;
+        this.issuedDate = calendar.getTime();
+
+        calendar.setTime(currentDate);
+        calendar.add(Calendar.DAY_OF_MONTH, -14);
+
+        this.dateToReturn = calendar.getTime();
+        this.dateReturned = null;
+        this.paidFine = false;
+    }
+
     public double calcFine() { return 0.0d;}
 
     public void payFine() {}
