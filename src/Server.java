@@ -3,30 +3,31 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class Server implements API {
-    private final ArrayList<Ebook> bookList;
-    private final ArrayList<User> database;
-    private final HashMap<String, String> publisherList;
+public enum Server implements API {
+    INSTANCE;
 
-    public Server() {
-        bookList = new ArrayList<>();
-        bookList.add(new Epub("The Art Of War", "Filiquarian", 110));
-        bookList.add(new Pdf("Quantum Physics for Hippies", "Independent", 175));
-        bookList.add(new Epub("Java For Dummies", "For Dummies", 504));
-        bookList.add(new Pdf("Design Patterns: Elements of Reusable Object-Oriented Software", "Addison-Wesley Professional", 416));
-        bookList.add(new Epub("The Pragmatic Programmer", "Addison-Wesley Professional", 352));
-        bookList.add(new Pdf("Blockchain For Dummies", "For Dummies", 256));
+    private final ArrayList<Ebook> bookList = new ArrayList<>();
+    private final ArrayList<User> database = new ArrayList<>();
+    private final HashMap<String, String> publisherList = new HashMap<>();
 
-        publisherList = new HashMap<>();
-        publisherList.put("Filiquarian", "This is 'Filiquarian' terms of responsability.");
-        publisherList.put("Independent", "This is 'Independent' terms of responsability.");
-        publisherList.put("For Dummies", "This is 'For Dummies' terms of responsability.");
-        publisherList.put("Addison-Wesley Professional", "This is 'Addison-Wesley' Professional terms of responsability.");
+    Server() {
+        try {
+            bookList.add(new Epub("The Art Of War", "Filiquarian", 110));
+            bookList.add(new Pdf("Quantum Physics for Hippies", "Independent", 175));
+            bookList.add(new Epub("Java For Dummies", "For Dummies", 504));
+            bookList.add(new Pdf("Design Patterns: Elements of Reusable Object-Oriented Software", "Addison-Wesley Professional", 416));
+            bookList.add(new Epub("The Pragmatic Programmer", "Addison-Wesley Professional", 352));
+            bookList.add(new Pdf("Blockchain For Dummies", "For Dummies", 256));
 
-        database = new ArrayList<>();
-        database.add(new User("user1", "123", new Loan(-1751369981, new Date())));
-        database.add(new User("user2", "123"));
-        database.add(new User("user3", "123", false));
+            publisherList.put("Filiquarian", "This is 'Filiquarian' terms of responsability.");
+            publisherList.put("Independent", "This is 'Independent' terms of responsability.");
+            publisherList.put("For Dummies", "This is 'For Dummies' terms of responsability.");
+            publisherList.put("Addison-Wesley Professional", "This is 'Addison-Wesley' Professional terms of responsability.");
+
+            database.add(new User("user1", "123", new Loan(-1751369981, new Date())));
+            database.add(new User("user2", "123"));
+            database.add(new User("user3", "123", false));
+        }catch (Exception ignored) {}
     }
 
     public User login(String username, String password) throws UserDoesntExistException, IncorrectPasswordException {
@@ -60,7 +61,7 @@ public class Server implements API {
         throw new BookDoesntExistException();
     }
 
-    public void requestBook(int hash, User user) throws BookAlreadyLoanedException {
+    public void requestBook(int hash, User user) throws BookAlreadyLoanedException, BookDoesntExistException {
         //Either use this condition in addition to readBook method or use it in the login method
         if(user.isInactive()) {
             System.out.println("Your account is currently blocked, you are unable to request the book");
@@ -111,7 +112,12 @@ public class Server implements API {
             }
         }
         assert ebook != null;
-        new BookReader(ebook);
+        try {
+            new BookReader(ebook);
+        }catch (BookDoesntExistException e) {
+            System.out.println("The book chosen doesn't exist");
+        }
+
     }
 
     public boolean showEULA(Ebook ebook) {

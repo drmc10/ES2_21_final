@@ -6,7 +6,13 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        API server = new Server();
+        API server = null;
+        try {
+            server = Server.INSTANCE;
+        }catch (Exception e) {
+            System.out.println("Error with book database");
+        }
+
         User currentUser;
 
         //Login
@@ -86,6 +92,8 @@ public class Main {
                             break;
                         } catch (BookAlreadyLoanedException e) {
                             System.out.println("Book already in your list");
+                        }catch (BookDoesntExistException e) {
+                            System.out.println("Book doesn't exist");
                         }
                     }
 

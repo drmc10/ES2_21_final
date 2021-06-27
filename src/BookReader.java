@@ -1,7 +1,10 @@
 import java.util.Scanner;
 
 public class BookReader {
-    public BookReader(Ebook ebook) {
+    public BookReader(Ebook ebook) throws BookDoesntExistException {
+        if(ebook == null)
+            throw new BookDoesntExistException();
+
         int currentPage = 1;
         System.out.println("You are now reading '" + ebook.getTitle() + "'.");
         while(true) {

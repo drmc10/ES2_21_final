@@ -5,7 +5,7 @@ public interface API {
     ArrayList<User> getDatabase();
     ArrayList<Ebook> getBookList();
     Ebook getBookByHash(int hash) throws BookDoesntExistException;
-    void requestBook(int hash, User user) throws BookAlreadyLoanedException;
+    void requestBook(int hash, User user) throws BookAlreadyLoanedException, BookDoesntExistException;
     void getClosestServer();
     void readBook(User user, Loan loan);
     boolean showEULA(Ebook ebook);

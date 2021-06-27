@@ -5,7 +5,15 @@ public class Epub implements Ebook {
     private String title;
     private String publisher;
 
-    public Epub(String title, String publisher, int pages) {
+    public Epub(String title, String publisher, int pages) throws MissingTitleException,
+            MissingPublisherException, IncorrectPageNumber  {
+        if(title.isEmpty())
+            throw new MissingTitleException();
+        if(publisher.isEmpty())
+            throw new MissingPublisherException();
+        if(pages <= 0)
+            throw new IncorrectPageNumber();
+
         this.title = title;
         this.publisher = publisher;
         this.pages = pages;
