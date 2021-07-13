@@ -1,10 +1,15 @@
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
 public class BookReader {
-    public BookReader(Ebook ebook) throws BookDoesntExistException {
+    public BookReader(Ebook ebook) throws BookDoesntExistException, IOException {
         if(ebook == null)
             throw new BookDoesntExistException();
 
+        Scanner scanner = new Scanner(System.in);
         int currentPage = 1;
         System.out.println("You are now reading '" + ebook.getTitle() + "'.");
         while(true) {
@@ -14,7 +19,6 @@ public class BookReader {
             System.out.println("3. Go to certain page");
             System.out.println("0. Exit reader");
 
-            Scanner scanner = new Scanner(System.in);
             String choice = scanner.nextLine();
 
             switch (choice) {

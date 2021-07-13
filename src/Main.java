@@ -32,6 +32,10 @@ public class Main {
                 System.out.println("Incorrect password. Please retry.");
             } catch(UserIsNotActiveException e) {
                 System.out.println("Your account has been canceled due to illegal activity.");
+            } catch (EmptyUsernameException e) {
+                System.out.println("Empty username, please try again");
+            } catch (EmptyPasswordException e) {
+                System.out.println("Empty password, please try again");
             }
         }
 
@@ -46,7 +50,7 @@ public class Main {
             switch (choice) {
                 //Request new book
                 case "1": {
-                    ArrayList<Ebook> ebooks = server.getBookList();
+                    ArrayList<Ebook> ebooks = BookDatabase.INSTANCE.getBookList();
 
                     while(true) {
                         ArrayList<Loan> loans = currentUser.getLoanList();
@@ -87,14 +91,15 @@ public class Main {
                         }
 
                         try {
-                            server.requestBook(server.getBookList().get(Integer.parseInt(bookChosen) - 1).getHash(), currentUser);
+                            server.requestBook(BookDatabase.INSTANCE.getBookList().get(Integer.parseInt(bookChosen) - 1).getHash(),
+                                    currentUser.getId());
                             System.out.println("The book has been haded to your list.");
                             break;
                         } catch (BookAlreadyLoanedException e) {
                             System.out.println("Book already in your list");
-                        }catch (BookDoesntExistException e) {
+                        } catch (BookDoesntExistException e) {
                             System.out.println("Book doesn't exist");
-                        }
+                        } catch (UserDoesntExistException ignored) {}
                     }
 
                     break;
@@ -118,13 +123,13 @@ public class Main {
                     for (Loan loan : loans) {
                         if(currentDate.compareTo(loan.getDateToReturn()) <= 0)
                             try {
-                                availableBooks.add(server.getBookByHash(loan.getBookHash()));
+                                availableBooks.add(BookDatabase.INSTANCE.getBookByHash(loan.getBookHash()));
                                 tempHash.put(loan.getBookHash(), loan.getDateToReturn());
                             } catch(BookDoesntExistException ignored) {}
 
                         else
                             try {
-                                nonAvailableBooks.add(server.getBookByHash(loan.getBookHash()));
+                                nonAvailableBooks.add(BookDatabase.INSTANCE.getBookByHash(loan.getBookHash()));
                             } catch(BookDoesntExistException ignored) {}
                     }
 
@@ -132,9 +137,9 @@ public class Main {
                         //Print all available books if there are any
                         int bookId = 1;
                         if(!availableBooks.isEmpty()) {
-                            System.out.println("Books available to read");
+                            System.out.println("Books available to read:");
                             for (Ebook ebook : availableBooks) {
-                                System.out.println(bookId + " : " + ebook.getTitle() + " <Available until " + tempHash.get(ebook.getHash())
+                                System.out.println("    " + bookId + " : " + ebook.getTitle() + " <Available until " + tempHash.get(ebook.getHash())
                                         + ">");
                                 bookId++;
                             }
@@ -143,9 +148,9 @@ public class Main {
 
                         //Print all unavailable books if there are any
                         if(!nonAvailableBooks.isEmpty()) {
-                            System.out.println("Books unavailable to read");
+                            System.out.println("Books unavailable to read:");
                             for (Ebook ebook : nonAvailableBooks) {
-                                System.out.println(ebook.getTitle());
+                                System.out.println("     " + ebook.getTitle());
                             }
                             System.out.println();
                         }
@@ -161,7 +166,9 @@ public class Main {
                         else if((Integer.parseInt(bookChosen) < 0 || Integer.parseInt(bookChosen) < bookId)) {
                             for (Loan loan : loans) {
                                 if(loan.getBookHash() == availableBooks.get(Integer.parseInt(bookChosen) - 1).getHash()) {
-                                    server.readBook(currentUser, loan);
+                                    try {
+                                        server.readBook(currentUser.getId(), loan);
+                                    } catch (UserDoesntExistException ignored) {}
                                     break;
                                 }
                             }

@@ -58,8 +58,9 @@ public class User {
         return id;
     }
 
-    public void addBookToLoanList(Ebook ebook) throws BookDoesntExistException {
-        loanList.add(new Loan(ebook.getHash()));
+    public void addBookToLoanList(int ebookHash) throws BookDoesntExistException {
+        loanList.removeIf(loan -> loan.getBookHash() == ebookHash);
+        loanList.add(new Loan(ebookHash, 14));
     }
 
     public ArrayList<Loan> getLoanList() {
