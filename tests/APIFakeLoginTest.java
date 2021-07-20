@@ -1,15 +1,14 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-public class APIFakeLogin {
+public class APIFakeLoginTest {
     static API api;
 
     @BeforeAll
     public static void setUp() {
-        api = Server.INSTANCE;
+        api = APIFake.INSTANCE;
     }
 
     @Test
@@ -29,6 +28,5 @@ public class APIFakeLogin {
             Assertions.assertEquals("testUser1", user.getUsername());
             Assertions.assertEquals("testUser1", user.getPassword());
         });
-
     }
 }

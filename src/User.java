@@ -7,17 +7,22 @@ public class User {
     private final String id;
     private final ArrayList<Loan> loanList;
     private boolean isActive;
+    private final String region;
 
-    public User(String username, String password) throws MissingPasswordException, EmptyPasswordException,
+    public User(String username, String password, String region) throws MissingPasswordException, EmptyPasswordException,
             MissingUsernameException, EmptyUsernameException, TooFewCharsUsernameException,
-            TooManyCharsUsernameException {
+            TooManyCharsUsernameException, MissingRegionException {
         checkConditions(username, password);
+
+        if(region.isEmpty())
+            throw new MissingRegionException();
 
         this.username = username;
         this.password = password;
         this.loanList = new ArrayList<>();
         this.id = UUID.randomUUID().toString();
         this.isActive = true;
+        this.region = region;
     }
 
     public User(String username, String password, Boolean isActive) throws MissingUsernameException, MissingPasswordException,
@@ -30,6 +35,7 @@ public class User {
         this.loanList = new ArrayList<>();
         this.id = UUID.randomUUID().toString();
         this.isActive = isActive;
+        this.region = "Europe";
     }
 
     public User(String username, String password, Loan loanToAdd) throws MissingUsernameException, MissingPasswordException, EmptyUsernameException, EmptyPasswordException, MissingLoanException, TooFewCharsUsernameException, TooManyCharsUsernameException {
@@ -44,6 +50,7 @@ public class User {
         this.id = UUID.randomUUID().toString();
         this.isActive = true;
         this.loanList.add(loanToAdd);
+        this.region = "Europe";
     }
 
     public String getUsername() {
@@ -58,8 +65,8 @@ public class User {
         return id;
     }
 
-    public void addBookToLoanList(int ebookHash) throws BookDoesntExistException {
-        loanList.removeIf(loan -> loan.getBookHash() == ebookHash);
+    public void addBookToLoanList(String ebookHash) throws BookDoesntExistException {
+        loanList.removeIf(loan -> loan.getBookHash().equals(ebookHash));
         loanList.add(new Loan(ebookHash, 14));
     }
 
@@ -75,7 +82,9 @@ public class User {
         isActive = active;
     }
 
-    private void checkConditions(String username, String password) throws MissingUsernameException, MissingPasswordException, EmptyUsernameException, EmptyPasswordException, TooFewCharsUsernameException, TooManyCharsUsernameException {
+    private void checkConditions(String username, String password) throws MissingUsernameException, MissingPasswordException,
+            EmptyUsernameException, EmptyPasswordException,
+            TooFewCharsUsernameException, TooManyCharsUsernameException {
         if(username == null)
             throw new MissingUsernameException();
         if(password == null)
@@ -95,4 +104,6 @@ public class User {
         if(password.length() > 24)
             throw new TooManyCharsUsernameException();
     }
+
+    public String getRegion() { return region;   }
 }

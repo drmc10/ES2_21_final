@@ -1,165 +1,84 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Calendar;
-import java.util.Date;
-
-public class Constructors {
-    //Epub Class
-    @Test
-    public void testEpubMissingTitle() {
-        Assertions.assertThrows(MissingTitleException.class, () -> new Epub("", "Publisher", 50));
-    }
-
-    @Test
-    public void testEpubMissingPublisher() {
-        Assertions.assertThrows(MissingPublisherException.class, () ->  new Epub("Title", "", 50));
-    }
-
-    @Test
-    public void testEpubNegativePages() {
-        Assertions.assertThrows(IncorrectPageNumber.class, () ->new Epub("Title", "Publisher", -50));
-    }
-
-    @Test
-    public void testEpubZeroPages() {
-        Assertions.assertThrows(IncorrectPageNumber.class, () -> new Epub("Title", "Publisher", 0));
-    }
-
-    //Pdf Class
-    @Test
-    public void testPdfMissingTitle() {
-        Assertions.assertThrows(MissingTitleException.class, () -> new Pdf("", "Publisher", 50));
-    }
-
-    @Test
-    public void testPdfMissingPublisher() {
-        Assertions.assertThrows(MissingPublisherException.class, () -> new Pdf("Title", "", 50));
-    }
-
-    @Test
-    public void testPdfNegativePages() {
-        Assertions.assertThrows(IncorrectPageNumber.class, () -> new Pdf("Title", "Publisher", -50));
-    }
-
-    @Test
-    public void testPdfZeroPages() {
-        Assertions.assertThrows(IncorrectPageNumber.class, () -> new Pdf("Title", "Publisher", 0));
-    }
-
-    //BookReader Class
-    @Test
-    public void testBookReaderBookNull() {
-        Assertions.assertThrows(BookDoesntExistException.class, () -> new BookReader(null));
-    }
-
-    //Loan Class to finish
-    @Test
-    public void testLoanConstWrongHash() {
-        Assertions.assertThrows(BookDoesntExistException.class, () -> new Loan(123, 14));
-    }
-
-    @Test
-    public void testLoanConsCorrect() {
-        Assertions.assertDoesNotThrow(() -> {
-            Loan loan = new Loan("The Art Of War".hashCode(), 14);
-            Assertions.assertEquals("The Art Of War".hashCode(), loan.getBookHash());
-        });
-    }
-
-    @Test
-    public void testLoanConstWrongHash2() {
-        Assertions.assertThrows(BookDoesntExistException.class, () -> new Loan(123,new Date(), 14));
-    }
-
-    @Test
-    public void testLoanConsCorrect2() {
-        Assertions.assertDoesNotThrow(() -> {
-            Date currentDate = new Date();
-            int numberOfDays = 14;
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(currentDate);
-            calendar.add(Calendar.DAY_OF_MONTH, -(numberOfDays * 2));
-            Date issuedDate = calendar.getTime();
-
-            calendar.setTime(currentDate);
-            calendar.add(Calendar.DAY_OF_MONTH, -numberOfDays);
-            Date dateToReturn = calendar.getTime();
-
-            Loan loan = new Loan("The Art Of War".hashCode(), currentDate, numberOfDays);
-            Assertions.assertEquals("The Art Of War".hashCode(), loan.getBookHash());
-            Assertions.assertEquals(issuedDate.getTime(), loan.getIssuedDate().getTime());
-            Assertions.assertEquals(dateToReturn, loan.getDateToReturn());
-        });
-    }
-
-    //User
+public class UserConstructor {
     @Test
     public void testUserCons1NameNull() {
         Assertions.assertThrows(MissingUsernameException.class, () ->
-                new User(null, "NelsonCortes"));
+                new User(null, "NelsonCortes", "Asia"));
     }
 
     @Test
     public void testUserCons1NameTooFewChars() {
         Assertions.assertThrows(TooFewCharsUsernameException.class, () ->
-                new User("12345", "NelsonCortes"));
+                new User("12345", "NelsonCortes", "Asia"));
     }
 
     @Test
     public void testUserCons1NameTooManyChars() {
         Assertions.assertThrows(TooManyCharsUsernameException.class, () ->
-                new User("1234567890123456789012345", "NelsonCortes"));
+                new User("1234567890123456789012345", "NelsonCortes", "Asia"));
     }
 
     @Test
     public void testUserCons1PassNull() {
         Assertions.assertThrows(MissingPasswordException.class, () ->
-                new User("Nelson", null));
+                new User("Nelson", null, "Asia"));
     }
 
     @Test
     public void testUserCons1PassTooFewChars() {
         Assertions.assertThrows(TooFewCharsUsernameException.class, () ->
-                new User("Nelson", "12345"));
+                new User("Nelson", "12345", "Asia"));
     }
 
     @Test
     public void testUserCons1PassTooManyChars() {
         Assertions.assertThrows(TooManyCharsUsernameException.class, () ->
-                new User("Nelson", "1234567890123456789012345"));
+                new User("Nelson", "1234567890123456789012345", "Asia"));
     }
 
     @Test
-    public void testUserCons1BothNull() {
+    public void testUserCons1UserNamePasswordNull() {
         Assertions.assertThrows(MissingUsernameException.class, () ->
-                new User(null, null));
+                new User(null, null, "Asia"));
+    }
+
+    @Test
+    public void testUserCons1RegionEmpty() {
+        Assertions.assertThrows(MissingRegionException.class, () ->
+                new User("Nelson", "NelsonCortes", ""));
     }
 
     @Test
     public void testUserCons1NameEmpty() {
         Assertions.assertThrows(EmptyUsernameException.class, () ->
-                new User("", "NelsonCortes"));
+                new User("", "NelsonCortes", "Asia"));
     }
 
     @Test
     public void testUserCons1PassEmpty() {
         Assertions.assertThrows(EmptyPasswordException.class, () ->
-                new User("Nelson", ""));
+                new User("Nelson", "", "Asia"));
     }
 
     @Test
-    public void testUserCons1BothEmpty() {
+    public void testUserCons1UsernamePasswordEmpty() {
         Assertions.assertThrows(EmptyUsernameException.class, () ->
-                new User("", ""));
+                new User("", "", "Asia"));
     }
 
     @Test
-    public void testUserCons1Ok() throws MissingPasswordException, EmptyPasswordException,
-            MissingUsernameException, EmptyUsernameException, TooFewCharsUsernameException,
-            TooManyCharsUsernameException {
-        User user = new User("Nelson", "NelsonCortes");
+    public void testUserCons1AllEmpty() {
+        Assertions.assertThrows(EmptyUsernameException.class, () ->
+                new User("", "", ""));
+    }
+
+    @Test
+    public void testUserCons1Ok() throws MissingPasswordException, MissingUsernameException, MissingRegionException,
+            TooManyCharsUsernameException, EmptyPasswordException, TooFewCharsUsernameException,
+            EmptyUsernameException {
+        User user = new User("Nelson", "NelsonCortes", "Asia");
         Assertions.assertEquals("Nelson", user.getUsername());
         Assertions.assertEquals("NelsonCortes", user.getPassword());
         Assertions.assertNotNull(user.getId());
@@ -254,37 +173,43 @@ public class Constructors {
     @Test
     public void testUserCons3NameNull() {
         Assertions.assertThrows(MissingUsernameException.class, () ->
-                new User(null, "NelsonCortes", new Loan("The Art Of War".hashCode(), 14)));
+                new User(null, "NelsonCortes", new Loan("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
+                        14)));
     }
 
     @Test
     public void testUserCons3NameTooFewChars() {
         Assertions.assertThrows(TooFewCharsUsernameException.class, () ->
-                new User("12345", "NelsonCortes", new Loan("The Art Of War".hashCode(), 14)));
+                new User("12345", "NelsonCortes", new Loan("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
+                        14)));
     }
 
     @Test
     public void testUserCons3NameTooManyChars() {
         Assertions.assertThrows(TooManyCharsUsernameException.class, () ->
-                new User("1234567890123456789012345", "NelsonCortes", new Loan("The Art Of War".hashCode(), 14)));
+                new User("1234567890123456789012345", "NelsonCortes", new Loan("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
+                        14)));
     }
 
     @Test
     public void testUserCons3PassNull() {
         Assertions.assertThrows(MissingPasswordException.class, () ->
-                new User("Nelson", null, new Loan("The Art Of War".hashCode(), 14)));
+                new User("Nelson", null, new Loan("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
+                        14)));
     }
 
     @Test
     public void testUserCons3PassTooFewChars() {
         Assertions.assertThrows(TooFewCharsUsernameException.class, () ->
-                new User("Nelson", "12345", new Loan("The Art Of War".hashCode(), 14)));
+                new User("Nelson", "12345", new Loan("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
+                        14)));
     }
 
     @Test
     public void testUserCons3PassTooManyChars() {
         Assertions.assertThrows(TooManyCharsUsernameException.class, () ->
-                new User("Nelson", "1234567890123456789012345", new Loan("The Art Of War".hashCode(), 14)));
+                new User("Nelson", "1234567890123456789012345", new Loan("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
+                        14)));
     }
 
     @Test
@@ -296,7 +221,8 @@ public class Constructors {
     @Test
     public void testUserCons3UserPassNull() {
         Assertions.assertThrows(MissingUsernameException.class, () ->
-                new User(null, null, new Loan("The Art Of War".hashCode(), 14)));
+                new User(null, null, new Loan("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
+                        14)));
     }
 
     @Test
@@ -320,27 +246,31 @@ public class Constructors {
     @Test
     public void testUserCons3UserEmpty() {
         Assertions.assertThrows(EmptyUsernameException.class, () ->
-                new User("", "NelsonFreitas", new Loan("The Art Of War".hashCode(), 14)));
+                new User("", "NelsonFreitas", new Loan("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
+                        14)));
     }
 
     @Test
     public void testUserCons3PassEmpty() {
         Assertions.assertThrows(EmptyPasswordException.class, () ->
 
-                new User("Nelson", "", new Loan("The Art Of War".hashCode(), 14)));
+                new User("Nelson", "", new Loan("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
+                        14)));
     }
 
     @Test
     public void testUserCons3BothEmpty() {
         Assertions.assertThrows(EmptyUsernameException.class, () ->
-                new User("", "", new Loan("The Art Of War".hashCode(), 14)));
+                new User("", "", new Loan("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
+                        14)));
     }
 
     @Test
     public void testUserCons3Ok() throws BookDoesntExistException, MissingPasswordException,
             EmptyPasswordException, MissingUsernameException, EmptyUsernameException,
             MissingLoanException, TooFewCharsUsernameException, TooManyCharsUsernameException {
-        User user = new User("Nelson", "NelsonCortes", new Loan("The Art Of War".hashCode(), 14));
+        User user = new User("Nelson", "NelsonCortes", new Loan("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
+                14));
         Assertions.assertEquals("Nelson", user.getUsername());
         Assertions.assertEquals("NelsonCortes", user.getPassword());
         Assertions.assertNotNull(user.getId());

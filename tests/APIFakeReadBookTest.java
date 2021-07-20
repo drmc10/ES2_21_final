@@ -1,19 +1,17 @@
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.*;
 
-public class APIFakeReadBook {
-    static API api;
+public class APIFakeReadBookTest {
+    static API api = null;
     static InputStream originalIn = null;
     static PrintStream originalOut = null;
+    static ByteArrayInputStream inputStream = null;
     static ByteArrayOutputStream outputStream = null;
 
     @BeforeAll
     public static void setUp() {
-        api = Server.INSTANCE;
+        api = APIFake.INSTANCE;
         originalIn = System.in;
         originalOut = System.out;
     }
@@ -27,15 +25,15 @@ public class APIFakeReadBook {
     @Test
     public void testReadBookExitReader() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
         User user = api.login("testUser2", "testUser2");
-        ByteArrayInputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
+        inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);
 
-        api.requestBook(-266838837, user.getId());
+        api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364", user.getId());
         Loan loan = null;
         for (Loan loan1 : user.getLoanList()) {
-            if (loan1.getBookHash() == -266838837) {
+            if (loan1.getBookHash().equals("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364")) {
                 loan = loan1;
                 break;
             }
@@ -58,14 +56,14 @@ public class APIFakeReadBook {
     @Test
     public void testReadBookBlockedUser() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
         User user = api.login("testUser2", "testUser2");
         System.setIn(new ByteArrayInputStream("1\n".getBytes()));
 
-        api.requestBook(-266838837, user.getId());
+        api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364", user.getId());
         Loan loan = null;
         for (Loan loan1 : user.getLoanList()) {
-            if (loan1.getBookHash() == -266838837) {
+            if (loan1.getBookHash().equals("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364")) {
                 loan = loan1;
                 break;
             }
@@ -87,7 +85,7 @@ public class APIFakeReadBook {
         User user = api.login("testUser1", "testUser1");
         Loan loan = null;
         for (Loan loan1 : user.getLoanList()) {
-            if (loan1.getBookHash() == -1751369981) {
+            if (loan1.getBookHash().equals("14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38")) {
                 loan = loan1;
                 break;
             }
@@ -103,14 +101,14 @@ public class APIFakeReadBook {
     @Test
     public void testReadBookOk() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
         User user = api.login("testUser2", "testUser2");
         System.setIn(new ByteArrayInputStream("1\n".getBytes()));
 
-        api.requestBook(-266838837, user.getId());
+        api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364", user.getId());
         Loan loan = null;
         for (Loan loan1 : user.getLoanList()) {
-            if (loan1.getBookHash() == -266838837) {
+            if (loan1.getBookHash().equals("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364")) {
                 loan = loan1;
                 break;
             }
@@ -128,15 +126,15 @@ public class APIFakeReadBook {
     @Test
     public void testReadBookNextPageInputError() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
         User user = api.login("testUser2", "testUser2");
-        ByteArrayInputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
+        inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);
 
-        api.requestBook(-266838837, user.getId());
+        api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364", user.getId());
         Loan loan = null;
         for (Loan loan1 : user.getLoanList()) {
-            if (loan1.getBookHash() == -266838837) {
+            if (loan1.getBookHash().equals("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364")) {
                 loan = loan1;
                 break;
             }
@@ -171,15 +169,15 @@ public class APIFakeReadBook {
     @Test
     public void testReadBookNextPageInputOk() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
         User user = api.login("testUser2", "testUser2");
-        ByteArrayInputStream inputStream = new ByteArrayInputStream("1\n0\n".getBytes());
+        inputStream = new ByteArrayInputStream("1\n0\n".getBytes());
         System.setIn(inputStream);
 
-        api.requestBook(-266838837, user.getId());
+        api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364", user.getId());
         Loan loan = null;
         for (Loan loan1 : user.getLoanList()) {
-            if (loan1.getBookHash() == -266838837) {
+            if (loan1.getBookHash().equals("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364")) {
                 loan = loan1;
                 break;
             }
@@ -205,15 +203,15 @@ public class APIFakeReadBook {
     @Test
     public void testReadBookPreviousPageInputError() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
         User user = api.login("testUser2", "testUser2");
-        ByteArrayInputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
+        inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);
 
-        api.requestBook(-266838837, user.getId());
+        api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364", user.getId());
         Loan loan = null;
         for (Loan loan1 : user.getLoanList()) {
-            if (loan1.getBookHash() == -266838837) {
+            if (loan1.getBookHash().equals("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364")) {
                 loan = loan1;
                 break;
             }
@@ -242,15 +240,15 @@ public class APIFakeReadBook {
     @Test
     public void testReadBookPreviousPageInputOk() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
         User user = api.login("testUser2", "testUser2");
-        ByteArrayInputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
+        inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);
 
-        api.requestBook(-266838837, user.getId());
+        api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364", user.getId());
         Loan loan = null;
         for (Loan loan1 : user.getLoanList()) {
-            if (loan1.getBookHash() == -266838837) {
+            if (loan1.getBookHash().equals("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364")) {
                 loan = loan1;
                 break;
             }
@@ -283,15 +281,15 @@ public class APIFakeReadBook {
     @Test
     public void testReadBookGotoPagePageInputErrorNegativePageNumber() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
         User user = api.login("testUser2", "testUser2");
-        ByteArrayInputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
+        inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);
 
-        api.requestBook(-266838837, user.getId());
+        api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364", user.getId());
         Loan loan = null;
         for (Loan loan1 : user.getLoanList()) {
-            if (loan1.getBookHash() == -266838837) {
+            if (loan1.getBookHash().equals("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364")) {
                 loan = loan1;
                 break;
             }
@@ -321,15 +319,15 @@ public class APIFakeReadBook {
     @Test
     public void testReadBookGotoPagePageInputErrorPage0() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
         User user = api.login("testUser2", "testUser2");
-        ByteArrayInputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
+        inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);
 
-        api.requestBook(-266838837, user.getId());
+        api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364", user.getId());
         Loan loan = null;
         for (Loan loan1 : user.getLoanList()) {
-            if (loan1.getBookHash() == -266838837) {
+            if (loan1.getBookHash().equals("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364")) {
                 loan = loan1;
                 break;
             }
@@ -359,15 +357,15 @@ public class APIFakeReadBook {
     @Test
     public void testReadBookGotoPagePageInputErrorAboveMaxPage() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
         User user = api.login("testUser2", "testUser2");
-        ByteArrayInputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
+        inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);
 
-        api.requestBook(-266838837, user.getId());
+        api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364", user.getId());
         Loan loan = null;
         for (Loan loan1 : user.getLoanList()) {
-            if (loan1.getBookHash() == -266838837) {
+            if (loan1.getBookHash().equals("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364")) {
                 loan = loan1;
                 break;
             }
@@ -397,15 +395,15 @@ public class APIFakeReadBook {
     @Test
     public void testReadBookGotoPagePageInputOk() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
         User user = api.login("testUser2", "testUser2");
-        ByteArrayInputStream inputStream = new ByteArrayInputStream("1\n".getBytes());
+        inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);
 
-        api.requestBook(-266838837, user.getId());
+        api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364", user.getId());
         Loan loan = null;
         for (Loan loan1 : user.getLoanList()) {
-            if (loan1.getBookHash() == -266838837) {
+            if (loan1.getBookHash().equals("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364")) {
                 loan = loan1;
                 break;
             }
@@ -429,5 +427,11 @@ public class APIFakeReadBook {
                 "3. Go to certain page" +
                 "0. Exit reader", outputStream.toString()
                 .replace("\r", "").replace("\n", ""));
+    }
+
+    @AfterEach
+    public void cleanUpEach() {
+        System.setIn(originalIn);
+        System.setOut(originalOut);
     }
 }

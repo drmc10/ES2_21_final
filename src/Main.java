@@ -8,7 +8,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         API server = null;
         try {
-            server = Server.INSTANCE;
+            server = APIFake.INSTANCE;
         }catch (Exception e) {
             System.out.println("Error with book database");
         }
@@ -61,12 +61,14 @@ public class Main {
                             boolean continueToNextIt = false;
                             for (Loan loan : loans) {
                                 //If the book has already been loaned in the past and is available to be renewed
-                                if (loan.getBookHash() == ebook.getHash() && new Date().compareTo(loan.getDateToReturn()) > 0) {
+                                if (loan.getBookHash().equals(ebook.getHash()) && new Date().compareTo(loan.getDateToReturn()) > 0
+                                && loan.getNumberOfRenewals() < 2) {
                                     System.out.println(bookId + " : " + ebook.getTitle() + " <Available to renew loan>");
                                     bookId++;
                                     continueToNextIt = true;
                                     //If the book is already in loaned
-                                } else if (loan.getBookHash() == ebook.getHash()) {
+                                } else if (loan.getBookHash().equals(ebook.getHash())
+                                        && new Date().compareTo(loan.getDateToReturn()) < 0) {
                                     System.out.println(bookId + " : " + ebook.getTitle() + " <Already in your list of available books>");
                                     bookId++;
                                     continueToNextIt = true;
@@ -99,7 +101,7 @@ public class Main {
                             System.out.println("Book already in your list");
                         } catch (BookDoesntExistException e) {
                             System.out.println("Book doesn't exist");
-                        } catch (UserDoesntExistException ignored) {}
+                        } catch (UserDoesntExistException | RenewLimitExceeded ignored) {}
                     }
 
                     break;
@@ -107,6 +109,14 @@ public class Main {
 
                 //Read book
                 case "2": {
+                    for (Loan loan : currentUser.getLoanList()) {
+                        try {
+                            System.out.println(BookDatabase.INSTANCE.getBookByHash(loan.getBookHash()).getTitle() + "   " +  loan.getDateToReturn() + "   " + loan.getNumberOfRenewals());
+                        } catch (BookDoesntExistException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
                     if (currentUser.getLoanList().isEmpty()) {
                         System.out.println("Your book list is empty, request a new book");
                         break;
@@ -119,7 +129,7 @@ public class Main {
                     ArrayList<Ebook> availableBooks = new ArrayList<>();
                     ArrayList<Ebook> nonAvailableBooks = new ArrayList<>();
                     ArrayList<Loan> loans = currentUser.getLoanList();
-                    HashMap<Integer, Date> tempHash = new HashMap<>();
+                    HashMap<String, Date> tempHash = new HashMap<>();
                     for (Loan loan : loans) {
                         if(currentDate.compareTo(loan.getDateToReturn()) <= 0)
                             try {
@@ -165,7 +175,7 @@ public class Main {
                             break;
                         else if((Integer.parseInt(bookChosen) < 0 || Integer.parseInt(bookChosen) < bookId)) {
                             for (Loan loan : loans) {
-                                if(loan.getBookHash() == availableBooks.get(Integer.parseInt(bookChosen) - 1).getHash()) {
+                                if(loan.getBookHash().equals(availableBooks.get(Integer.parseInt(bookChosen) - 1).getHash())) {
                                     try {
                                         server.readBook(currentUser.getId(), loan);
                                     } catch (UserDoesntExistException ignored) {}
