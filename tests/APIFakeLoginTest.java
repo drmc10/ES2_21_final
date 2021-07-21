@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 
 public class APIFakeLoginTest {
-    static API api;
+    private static API api;
 
     @BeforeAll
     public static void setUp() {

@@ -10,6 +10,8 @@ public enum ServerDataBase {
         serverList.add(new Server("Europe"));
         serverList.add(new Server("America"));
         serverList.add(new Server("Asia"));
+        serverList.add(new Server("Africa"));
+        serverList.add(new Server("Australia"));
     }
 
     public Server getServer(String region) throws ServerNotFoundException {
