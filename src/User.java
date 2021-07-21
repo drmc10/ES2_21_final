@@ -10,8 +10,8 @@ public class User {
     private final String region;
 
     public User(String username, String password, String region) throws MissingPasswordException, EmptyPasswordException,
-            MissingUsernameException, EmptyUsernameException, TooFewCharsUsernameException,
-            TooManyCharsUsernameException, MissingRegionException {
+            MissingUsernameException, EmptyUsernameException, TooFewCharsException,
+            TooManyCharsException, MissingRegionException {
         checkConditions(username, password);
 
         if(region.isEmpty())
@@ -26,8 +26,8 @@ public class User {
     }
 
     public User(String username, String password, Boolean isActive) throws MissingUsernameException, MissingPasswordException,
-            EmptyUsernameException, EmptyPasswordException, TooFewCharsUsernameException,
-            TooManyCharsUsernameException {
+            EmptyUsernameException, EmptyPasswordException, TooFewCharsException,
+            TooManyCharsException {
         checkConditions(username, password);
 
         this.username = username;
@@ -38,7 +38,7 @@ public class User {
         this.region = "Europe";
     }
 
-    public User(String username, String password, Loan loanToAdd) throws MissingUsernameException, MissingPasswordException, EmptyUsernameException, EmptyPasswordException, MissingLoanException, TooFewCharsUsernameException, TooManyCharsUsernameException {
+    public User(String username, String password, Loan loanToAdd) throws MissingUsernameException, MissingPasswordException, EmptyUsernameException, EmptyPasswordException, MissingLoanException, TooFewCharsException, TooManyCharsException {
         checkConditions(username, password);
 
         if(loanToAdd == null)
@@ -84,7 +84,7 @@ public class User {
 
     private void checkConditions(String username, String password) throws MissingUsernameException, MissingPasswordException,
             EmptyUsernameException, EmptyPasswordException,
-            TooFewCharsUsernameException, TooManyCharsUsernameException {
+            TooFewCharsException, TooManyCharsException {
         if(username == null)
             throw new MissingUsernameException();
         if(password == null)
@@ -93,16 +93,16 @@ public class User {
         if(username.equals(""))
             throw new EmptyUsernameException();
         if(username.length() < 6)
-            throw new TooFewCharsUsernameException();
+            throw new TooFewCharsException();
         if(username.length() > 24)
-            throw new TooManyCharsUsernameException();
+            throw new TooManyCharsException();
 
         if(password.equals(""))
             throw new EmptyPasswordException();
         if(password.length() < 6)
-            throw new TooFewCharsUsernameException();
+            throw new TooFewCharsException();
         if(password.length() > 24)
-            throw new TooManyCharsUsernameException();
+            throw new TooManyCharsException();
     }
 
     public String getRegion() { return region;   }

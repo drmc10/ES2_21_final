@@ -10,13 +10,13 @@ public class UserConstructor {
 
     @Test
     public void testUserCons1NameTooFewChars() {
-        Assertions.assertThrows(TooFewCharsUsernameException.class, () ->
+        Assertions.assertThrows(TooFewCharsException.class, () ->
                 new User("12345", "NelsonCortes", "Asia"));
     }
 
     @Test
     public void testUserCons1NameTooManyChars() {
-        Assertions.assertThrows(TooManyCharsUsernameException.class, () ->
+        Assertions.assertThrows(TooManyCharsException.class, () ->
                 new User("1234567890123456789012345", "NelsonCortes", "Asia"));
     }
 
@@ -28,13 +28,13 @@ public class UserConstructor {
 
     @Test
     public void testUserCons1PassTooFewChars() {
-        Assertions.assertThrows(TooFewCharsUsernameException.class, () ->
+        Assertions.assertThrows(TooFewCharsException.class, () ->
                 new User("Nelson", "12345", "Asia"));
     }
 
     @Test
     public void testUserCons1PassTooManyChars() {
-        Assertions.assertThrows(TooManyCharsUsernameException.class, () ->
+        Assertions.assertThrows(TooManyCharsException.class, () ->
                 new User("Nelson", "1234567890123456789012345", "Asia"));
     }
 
@@ -76,7 +76,7 @@ public class UserConstructor {
 
     @Test
     public void testUserCons1Ok() throws MissingPasswordException, MissingUsernameException, MissingRegionException,
-            TooManyCharsUsernameException, EmptyPasswordException, TooFewCharsUsernameException,
+            TooManyCharsException, EmptyPasswordException, TooFewCharsException,
             EmptyUsernameException {
         User user = new User("Nelson", "NelsonCortes", "Asia");
         Assertions.assertEquals("Nelson", user.getUsername());
@@ -94,13 +94,13 @@ public class UserConstructor {
 
     @Test
     public void testUserCons2NameTooFewChars() {
-        Assertions.assertThrows(TooFewCharsUsernameException.class, () ->
+        Assertions.assertThrows(TooFewCharsException.class, () ->
                 new User("12345", "NelsonCortes", true));
     }
 
     @Test
     public void testUserCons2NameTooManyChars() {
-        Assertions.assertThrows(TooManyCharsUsernameException.class, () ->
+        Assertions.assertThrows(TooManyCharsException.class, () ->
                 new User("1234567890123456789012345", "NelsonCortes", true));
     }
 
@@ -112,13 +112,13 @@ public class UserConstructor {
 
     @Test
     public void testUserCons2PassTooFewChars() {
-        Assertions.assertThrows(TooFewCharsUsernameException.class, () ->
+        Assertions.assertThrows(TooFewCharsException.class, () ->
                 new User("Nelson", "12345", true));
     }
 
     @Test
     public void testUserCons2PassTooManyChars() {
-        Assertions.assertThrows(TooManyCharsUsernameException.class, () ->
+        Assertions.assertThrows(TooManyCharsException.class, () ->
                 new User("Nelson", "1234567890123456789012345", true));
     }
 
@@ -148,8 +148,8 @@ public class UserConstructor {
 
     @Test
     public void testUserCons2OkActiveTrue() throws MissingPasswordException, EmptyPasswordException,
-            MissingUsernameException, EmptyUsernameException, TooFewCharsUsernameException,
-            TooManyCharsUsernameException {
+            MissingUsernameException, EmptyUsernameException, TooFewCharsException,
+            TooManyCharsException {
         User user = new User("Nelson", "NelsonCortes", true);
         Assertions.assertEquals("Nelson", user.getUsername());
         Assertions.assertEquals("NelsonCortes", user.getPassword());
@@ -160,8 +160,8 @@ public class UserConstructor {
 
     @Test
     public void testUserCons2OkActiveFalse() throws MissingPasswordException, EmptyPasswordException,
-            MissingUsernameException, EmptyUsernameException, TooFewCharsUsernameException,
-            TooManyCharsUsernameException {
+            MissingUsernameException, EmptyUsernameException, TooFewCharsException,
+            TooManyCharsException {
         User user = new User("Nelson", "NelsonCortes", false);
         Assertions.assertEquals("Nelson", user.getUsername());
         Assertions.assertEquals("NelsonCortes", user.getPassword());
@@ -179,14 +179,14 @@ public class UserConstructor {
 
     @Test
     public void testUserCons3NameTooFewChars() {
-        Assertions.assertThrows(TooFewCharsUsernameException.class, () ->
+        Assertions.assertThrows(TooFewCharsException.class, () ->
                 new User("12345", "NelsonCortes", new Loan("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
                         14)));
     }
 
     @Test
     public void testUserCons3NameTooManyChars() {
-        Assertions.assertThrows(TooManyCharsUsernameException.class, () ->
+        Assertions.assertThrows(TooManyCharsException.class, () ->
                 new User("1234567890123456789012345", "NelsonCortes", new Loan("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
                         14)));
     }
@@ -200,14 +200,14 @@ public class UserConstructor {
 
     @Test
     public void testUserCons3PassTooFewChars() {
-        Assertions.assertThrows(TooFewCharsUsernameException.class, () ->
+        Assertions.assertThrows(TooFewCharsException.class, () ->
                 new User("Nelson", "12345", new Loan("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
                         14)));
     }
 
     @Test
     public void testUserCons3PassTooManyChars() {
-        Assertions.assertThrows(TooManyCharsUsernameException.class, () ->
+        Assertions.assertThrows(TooManyCharsException.class, () ->
                 new User("Nelson", "1234567890123456789012345", new Loan("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
                         14)));
     }
@@ -268,7 +268,7 @@ public class UserConstructor {
     @Test
     public void testUserCons3Ok() throws BookDoesntExistException, MissingPasswordException,
             EmptyPasswordException, MissingUsernameException, EmptyUsernameException,
-            MissingLoanException, TooFewCharsUsernameException, TooManyCharsUsernameException, InvalidHashException, InvalidNumberOfDaysToLoanException {
+            MissingLoanException, TooFewCharsException, TooManyCharsException, InvalidHashException, InvalidNumberOfDaysToLoanException {
         User user = new User("Nelson", "NelsonCortes", new Loan("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
                 14));
         Assertions.assertEquals("Nelson", user.getUsername());
