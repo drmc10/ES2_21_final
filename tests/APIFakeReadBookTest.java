@@ -25,7 +25,7 @@ public class APIFakeReadBookTest {
     @Test
     public void testReadBookExitReader() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
         User user = api.login("testUser2", "testUser2");
         inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);
@@ -56,7 +56,7 @@ public class APIFakeReadBookTest {
     @Test
     public void testReadBookBlockedUser() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
         User user = api.login("testUser2", "testUser2");
         System.setIn(new ByteArrayInputStream("1\n".getBytes()));
 
@@ -101,7 +101,7 @@ public class APIFakeReadBookTest {
     @Test
     public void testReadBookOk() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
         User user = api.login("testUser2", "testUser2");
         System.setIn(new ByteArrayInputStream("1\n".getBytes()));
 
@@ -126,7 +126,7 @@ public class APIFakeReadBookTest {
     @Test
     public void testReadBookNextPageInputError() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
         User user = api.login("testUser2", "testUser2");
         inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);
@@ -169,7 +169,7 @@ public class APIFakeReadBookTest {
     @Test
     public void testReadBookNextPageInputOk() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
         User user = api.login("testUser2", "testUser2");
         inputStream = new ByteArrayInputStream("1\n0\n".getBytes());
         System.setIn(inputStream);
@@ -203,7 +203,7 @@ public class APIFakeReadBookTest {
     @Test
     public void testReadBookPreviousPageInputError() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
         User user = api.login("testUser2", "testUser2");
         inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);
@@ -240,7 +240,7 @@ public class APIFakeReadBookTest {
     @Test
     public void testReadBookPreviousPageInputOk() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
         User user = api.login("testUser2", "testUser2");
         inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);
@@ -281,7 +281,7 @@ public class APIFakeReadBookTest {
     @Test
     public void testReadBookGotoPagePageInputErrorNegativePageNumber() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
         User user = api.login("testUser2", "testUser2");
         inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);
@@ -319,7 +319,7 @@ public class APIFakeReadBookTest {
     @Test
     public void testReadBookGotoPagePageInputErrorPage0() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
         User user = api.login("testUser2", "testUser2");
         inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);
@@ -357,7 +357,7 @@ public class APIFakeReadBookTest {
     @Test
     public void testReadBookGotoPagePageInputErrorAboveMaxPage() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
         User user = api.login("testUser2", "testUser2");
         inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);
@@ -395,7 +395,7 @@ public class APIFakeReadBookTest {
     @Test
     public void testReadBookGotoPagePageInputOk() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
         User user = api.login("testUser2", "testUser2");
         inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);

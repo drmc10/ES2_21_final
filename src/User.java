@@ -65,7 +65,7 @@ public class User {
         return id;
     }
 
-    public void addBookToLoanList(String ebookHash) throws BookDoesntExistException {
+    public void addBookToLoanList(String ebookHash) throws BookDoesntExistException, InvalidHashException, InvalidNumberOfDaysToLoanException {
         loanList.removeIf(loan -> loan.getBookHash().equals(ebookHash));
         loanList.add(new Loan(ebookHash, 14));
     }

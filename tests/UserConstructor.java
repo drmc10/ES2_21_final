@@ -268,7 +268,7 @@ public class UserConstructor {
     @Test
     public void testUserCons3Ok() throws BookDoesntExistException, MissingPasswordException,
             EmptyPasswordException, MissingUsernameException, EmptyUsernameException,
-            MissingLoanException, TooFewCharsUsernameException, TooManyCharsUsernameException {
+            MissingLoanException, TooFewCharsUsernameException, TooManyCharsUsernameException, InvalidHashException, InvalidNumberOfDaysToLoanException {
         User user = new User("Nelson", "NelsonCortes", new Loan("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
                 14));
         Assertions.assertEquals("Nelson", user.getUsername());

@@ -50,7 +50,7 @@ public class APIFakeRequestBookTest {
     @Test
     public void testRequestBookBlockedUSer() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
         System.setOut(new PrintStream(outputStream));
         api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
                 api.login("testUser3", "testUser3").getId());
@@ -63,7 +63,7 @@ public class APIFakeRequestBookTest {
     @Test
     public void testRequestBookAcceptEULA() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
         System.setIn(new ByteArrayInputStream("1\n".getBytes()));
         System.setOut(new PrintStream(outputStream));
         User user = api.login("testUser1", "testUser1");
@@ -89,7 +89,7 @@ public class APIFakeRequestBookTest {
     @Test
     public void testRequestBookDeclineEULA() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
         System.setIn(new ByteArrayInputStream("2\n".getBytes()));
         System.setOut(new PrintStream(outputStream));
         api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364"
@@ -104,7 +104,7 @@ public class APIFakeRequestBookTest {
     @Test
     public void testRequestBookWrongChoice() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
         System.setIn(new ByteArrayInputStream("3\n".getBytes()));
         System.setOut(new PrintStream(outputStream));
         api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364"

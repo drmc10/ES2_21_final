@@ -10,7 +10,14 @@ public class Loan {
     private int numberOfRenewals;
     private final int numberOfDays;
 
-    public Loan(String bookHash, int numberOfDays) throws BookDoesntExistException {
+    public Loan(String bookHash, int numberOfDays) throws BookDoesntExistException, InvalidHashException,
+            InvalidNumberOfDaysToLoanException {
+        if(bookHash.length() != 64)
+            throw new InvalidHashException();
+
+        if(numberOfDays <= 0)
+            throw new InvalidNumberOfDaysToLoanException();
+
         //If book doesn't exist, an exception is thrown
         BookDatabase.INSTANCE.getBookByHash(bookHash);
         Calendar calendar = Calendar.getInstance();
@@ -28,7 +35,14 @@ public class Loan {
         this.numberOfDays = numberOfDays;
     }
 
-    public Loan(String bookHash, Date currentDate, int numberOfDays) throws BookDoesntExistException {
+    public Loan(String bookHash, Date currentDate, int numberOfDays) throws BookDoesntExistException, InvalidHashException,
+            InvalidNumberOfDaysToLoanException {
+        if(bookHash.length() != 64)
+            throw new InvalidHashException();
+
+        if(numberOfDays <= 0)
+            throw new InvalidNumberOfDaysToLoanException();
+
         //If book doesn't exist, an exception is thrown
         BookDatabase.INSTANCE.getBookByHash(bookHash);
         Calendar calendar = Calendar.getInstance();
@@ -60,6 +74,8 @@ public class Loan {
             calendar.setTime(new Date());
             calendar.add(Calendar.DAY_OF_MONTH, this.numberOfDays);
             this.dateToReturn = calendar.getTime();
+
+            System.out.println("Loan renewal successfull");
         } else {
             throw new RenewLimitExceeded();
         }

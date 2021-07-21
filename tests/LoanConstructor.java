@@ -7,11 +7,23 @@ import java.util.Date;
 public class LoanConstructor {
     @Test
     public void testLoanConstEmptyHash() {
-        Assertions.assertThrows(BookDoesntExistException.class, () -> new Loan("", 14));
+        Assertions.assertThrows(InvalidHashException.class, () -> new Loan("", 14));
     }
 
     @Test
-    public void testLoanConsCorrect() {
+    public void testLoanCons1NegativeNumberOfDays() {
+        Assertions.assertThrows(InvalidNumberOfDaysToLoanException.class, () -> new Loan("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
+                -1));
+    }
+
+    @Test
+    public void testLoanCons1NullNumberOfDays() {
+        Assertions.assertThrows(InvalidNumberOfDaysToLoanException.class, () -> new Loan("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
+                0));
+    }
+
+    @Test
+    public void testLoanCons1ok() {
         Assertions.assertDoesNotThrow(() -> {
             Loan loan = new Loan("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
                     14);
@@ -21,12 +33,24 @@ public class LoanConstructor {
     }
 
     @Test
-    public void testLoanConstWrongHash2() {
-        Assertions.assertThrows(BookDoesntExistException.class, () -> new Loan("123123",new Date(), 14));
+    public void testLoanCons2NegativeNumberOfDays() {
+        Assertions.assertThrows(InvalidNumberOfDaysToLoanException.class, () -> new Loan("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
+                new Date(), -1));
     }
 
     @Test
-    public void testLoanConsCorrect2() {
+    public void testLoanCons2NullNumberOfDays() {
+        Assertions.assertThrows(InvalidNumberOfDaysToLoanException.class, () -> new Loan("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
+                new Date(), 0));
+    }
+
+    @Test
+    public void testLoanConstWrongHash2() {
+        Assertions.assertThrows(InvalidHashException.class, () -> new Loan("123123",new Date(), 14));
+    }
+
+    @Test
+    public void testLoanCons2Ok() {
         Assertions.assertDoesNotThrow(() -> {
             Date currentDate = new Date();
             int numberOfDays = 14;

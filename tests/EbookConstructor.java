@@ -45,6 +45,26 @@ public class EbookConstructor {
     }
 
     @Test
+    public void testEbookHashOk() {
+        Assertions.assertDoesNotThrow(() -> new Ebook("Title", "Publisher", 5,
+                "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 1000, ".pdf"));
+    }
+
+    @Test
+    public void testEbookWrongExtension() {
+        Assertions.assertThrows(InvalidFileExtension.class, () -> new Ebook("Title", "Publisher", 5,
+                "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 1000,
+                ".exe"));
+    }
+
+    @Test
+    public void testEbookEmptyExtension() {
+        Assertions.assertThrows(InvalidFileExtension.class, () -> new Ebook("Title", "Publisher", 5,
+                "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 1000,
+                ""));
+    }
+
+    @Test
     public void testEbookOkPdf() {
         Assertions.assertDoesNotThrow(() -> new Ebook("Title", "Publisher", 5,
                 "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 1000, ".pdf"));
@@ -54,5 +74,40 @@ public class EbookConstructor {
     public void testEbookOkEpub() {
         Assertions.assertDoesNotThrow(() -> new Ebook("Title", "Publisher", 5,
                 "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 1000, ".epub"));
+    }
+
+    @Test
+    public void testEbookAbove100000size() {
+        Assertions.assertThrows(InvalidFileSizeException.class, () -> new Ebook("Title", "Publisher", 5,
+                "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 100001,
+                ".pdf"));
+    }
+
+    @Test
+    public void testEbookNullSize() {
+        Assertions.assertThrows(InvalidFileSizeException.class, () -> new Ebook("Title", "Publisher", 5,
+                "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 0,
+                ".pdf"));
+    }
+
+    @Test
+    public void testEbookMaxSize() {
+        Assertions.assertDoesNotThrow(() -> new Ebook("Title", "Publisher", 5,
+                "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 100000,
+                ".pdf"));
+    }
+
+    @Test
+    public void testEbookMinSize() {
+        Assertions.assertDoesNotThrow(() -> new Ebook("Title", "Publisher", 5,
+                "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 1,
+                ".pdf"));
+    }
+
+    @Test
+    public void testEbookNegativeSize() {
+        Assertions.assertThrows(InvalidFileSizeException.class, () -> new Ebook("Title", "Publisher", 5,
+                "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", -1,
+                ".pdf"));
     }
 }

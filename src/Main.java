@@ -101,7 +101,7 @@ public class Main {
                             System.out.println("Book already in your list");
                         } catch (BookDoesntExistException e) {
                             System.out.println("Book doesn't exist");
-                        } catch (UserDoesntExistException | RenewLimitExceeded ignored) {}
+                        } catch (UserDoesntExistException | RenewLimitExceeded | InvalidHashException ignored) {}
                     }
 
                     break;
