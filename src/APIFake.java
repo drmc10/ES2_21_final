@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -15,12 +14,21 @@ public enum APIFake implements API {
     }
 
     public User login(String username, String password) throws UserDoesntExistException, IncorrectPasswordException,
-            EmptyUsernameException, EmptyPasswordException {
+            EmptyUsernameException, EmptyPasswordException, NullParameterException, TooFewCharsException, TooManyCharsException {
+        if(username == null || password == null)
+            throw new NullParameterException();
+
         if(username.isEmpty())
             throw new EmptyUsernameException();
 
         if(password.isEmpty())
             throw new EmptyPasswordException();
+
+        if(username.length() < 5 || password.length() < 5)
+            throw new TooFewCharsException();
+
+        if(username.length() > 25 || password.length() > 25)
+            throw new TooManyCharsException();
 
         for (User user : userDatabase.getUserList()) {
             if(user.getUsername().equals(username))
@@ -34,13 +42,25 @@ public enum APIFake implements API {
         throw new UserDoesntExistException();
     }
 
-    @Override
-    public ArrayList<Ebook> getBookDataBase() {
-        return bookDatabase.getBookList();
-    }
-
     public void requestBook(String hash, String userId) throws BookAlreadyLoanedException, BookDoesntExistException,
-            UserDoesntExistException {
+            UserDoesntExistException, NullParameterException, InvalidHashException, TooFewCharsException,
+            TooManyCharsException, MissingUserIdException {
+        if(hash == null || userId == null)
+            throw new NullParameterException();
+
+        if(userId.equals(""))
+            throw new MissingUserIdException();
+        if(hash.equals(""))
+            throw new InvalidHashException();
+
+        if(hash.length() != 64)
+            throw new InvalidHashException();
+
+        if(userId.length() < 36)
+            throw new TooFewCharsException();
+        if(userId.length() > 36)
+            throw new TooManyCharsException();
+
         User user = userDatabase.getUserById(userId);
 
         if(user.isInactive()) {
@@ -52,8 +72,8 @@ public enum APIFake implements API {
 
         Server server;
         try {
-            server = getClosestServer(user.getRegion());
-        } catch (ServerNotFoundException e) {
+            server = getClosestServer(user.getContinent());
+        } catch (ServerNotFoundException | NullParameterException e) {
             server = new Server("Europe");
         }
 
@@ -77,11 +97,25 @@ public enum APIFake implements API {
             server.requestBook(user.getId(), ebook);
     }
 
-    public Server getClosestServer(String region) throws ServerNotFoundException {
-        return ServerDataBase.INSTANCE.getServer(region);
+    public Server getClosestServer(String continent) throws ServerNotFoundException, NullParameterException {
+        if(continent == null)
+            throw new NullParameterException();
+        return ServerDataBase.INSTANCE.getServer(continent);
     }
 
-    public void readBook(String userId, Loan loan) throws UserDoesntExistException {
+    public void readBook(String userId, Loan loan) throws UserDoesntExistException, NullParameterException, TooFewCharsException,
+            TooManyCharsException, MissingUserIdException {
+        if(userId == null || loan == null)
+            throw new NullParameterException();
+
+        if(userId.equals(""))
+            throw new MissingUserIdException();
+
+        if(userId.length() < 36)
+            throw new TooFewCharsException();
+        if(userId.length() > 36)
+            throw new TooManyCharsException();
+
         if(userDatabase.getUserById(userId).isInactive()) {
             System.out.println("Your account is currently blocked, you are unable to read the book");
             return;
@@ -111,7 +145,10 @@ public enum APIFake implements API {
 
     }
 
-    public boolean showEULA(Ebook ebook) {
+    public boolean showEULA(Ebook ebook) throws NullParameterException {
+        if(ebook == null)
+            throw new NullParameterException();
+
         String resTerm = bookDatabase.getPublisherList().get(ebook.getPublisher());
 
         System.out.println(resTerm);
@@ -135,7 +172,18 @@ public enum APIFake implements API {
         return false;
     }
 
-    public void blockUser(String userId) throws UserDoesntExistException {
+    public void blockUser(String userId) throws UserDoesntExistException, NullParameterException, TooFewCharsException,
+            TooManyCharsException, MissingUserIdException {
+        if(userId == null)
+            throw new NullParameterException();
+        if(userId.equals(""))
+            throw new MissingUserIdException();
+
+        if(userId.length() < 36)
+            throw new TooFewCharsException();
+        if(userId.length() > 36)
+            throw new TooManyCharsException();
+
         for (User user : userDatabase.getUserList()) {
             if(user.getId().equals(userId)) {
                 user.setActive(false);

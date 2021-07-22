@@ -58,13 +58,6 @@ public class EbookConstructor {
     }
 
     @Test
-    public void testEbookEmptyExtension() {
-        Assertions.assertThrows(InvalidFileExtension.class, () -> new Ebook("Title", "Publisher", 5,
-                "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 1000,
-                ""));
-    }
-
-    @Test
     public void testEbookOkPdf() {
         Assertions.assertDoesNotThrow(() -> new Ebook("Title", "Publisher", 5,
                 "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 1000, ".pdf"));
@@ -109,5 +102,93 @@ public class EbookConstructor {
         Assertions.assertThrows(InvalidFileSizeException.class, () -> new Ebook("Title", "Publisher", 5,
                 "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", -1,
                 ".pdf"));
+    }
+
+    @Test
+    public void CreateEbookTitleNull_Object() {
+        Assertions.assertThrows(NullParameterException.class, () -> new Ebook(null, "Publisher", 5,
+                "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 1000, ".pdf"));
+    }
+
+    @Test
+    public void CreateEbookPublisherNull_Object() {
+        Assertions.assertThrows(NullParameterException.class, () -> new Ebook("Title", null, 5,
+                "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 1000, ".pdf"));
+    }
+
+    @Test
+    public void CreateEbookHashNull_Object() {
+        Assertions.assertThrows(NullParameterException.class, () -> new Ebook("Title", "Publisher", 5,
+                null, 1000, ".pdf"));
+    }
+
+    @Test
+    public void CreateEbookExtensionNull_Object() {
+        Assertions.assertThrows(NullParameterException.class, () -> new Ebook("Title", "Publisher", 5,
+                "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 1000, null));
+    }
+
+    @Test
+    public void CreateEbookValorInferiorTitle() {
+        Assertions.assertDoesNotThrow(() -> new Ebook("anjos", "Publisher", 5,
+                "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 1000, ".pdf"));
+    }
+
+    @Test
+    public void CreateEbookValorSuperiorTitle() {
+        Assertions.assertDoesNotThrow(() -> new Ebook("anjos_e_demonios_anjos_e_demonios_anjos_e_demonios",
+                "Publisher", 5,
+                "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 1000, ".pdf"));
+    }
+
+    @Test
+    public void CreateEbookValorInferiorPublisher() {
+        Assertions.assertDoesNotThrow(() -> new Ebook("Title", "porto", 5,
+                "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 1000, ".pdf"));
+    }
+
+    @Test
+    public void CreateEbookValorSuperiorPublisher() {
+        Assertions.assertDoesNotThrow(() -> new Ebook("Title",
+                "porto_editora_porto_editora_porto_editora_porto_ed", 5,
+                "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 1000, ".pdf"));
+    }
+
+    @Test
+    public void testEbookTitleAbove50() {
+        Assertions.assertThrows(TooManyCharsException.class, () -> new Ebook("anjos_e_demonios_anjos_e_demonios_anjos_e_demonioss",
+                "Publisher", 5,
+                "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 1000, ".pdf"));
+    }
+
+    @Test
+    public void testEbookTitleBelow5() {
+        Assertions.assertThrows(TooFewCharsException.class, () -> new Ebook("anjo","Publisher", 5,
+                "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 1000, ".pdf"));
+    }
+
+    @Test
+    public void testEbookPublisherAbove50() {
+        Assertions.assertThrows(TooManyCharsException.class, () -> new Ebook("anjos",
+                "porto_editora_porto_editora_porto_editora_porto_edi", 5,
+                "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 1000, ".pdf"));
+    }
+
+    @Test
+    public void testEbookPublisherBelow5() {
+        Assertions.assertThrows(TooFewCharsException.class, () -> new Ebook("anjos","port", 5,
+                "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 1000, ".pdf"));
+    }
+
+    @Test
+    public void testEbookPagesAbove2000() {
+        Assertions.assertThrows(IncorrectPageNumber.class, () -> new Ebook("Title","Publisher", 20001,
+                "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 1000, ".pdf"));
+    }
+
+    @Test
+    public void testEbookValorLimiteSuperiorPages() {
+        Assertions.assertDoesNotThrow(() -> new Ebook("Title","Publisher", 2000,
+                "14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38", 1000, ".pdf"));
     }
 }

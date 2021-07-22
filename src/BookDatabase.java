@@ -17,7 +17,7 @@ public enum BookDatabase {
                     "2A72ED4386065E4ABE91AF5682A7D310BF280798B06DE1DC18D457AC80A931C4", 2000, ".epub"));
             bookList.add(new Ebook("Java For Dummies", "For Dummies", 504,
                     "16BC9EF7327955D701A1EBF7E8A1CA413E92A22A0C6F4F865CFF9D46380B5F7C", 3000, ".pdf"));
-            bookList.add(new Ebook("Design Patterns: Elements of Reusable Object-Oriented Software",
+            bookList.add(new Ebook("Elements of Reusable Object-Oriented Software",
                     "Addison-Wesley Professional", 416,
                     "EB1BBEAEDCB50107A55AC049B62384B6A0BCFBF5E2988BEF9536FC5C27404D5A", 6000, ".epub"));
             bookList.add(new Ebook("The Pragmatic Programmer", "Addison-Wesley Professional",
@@ -63,7 +63,7 @@ public enum BookDatabase {
                     "2A72ED4386065E4ABE91AF5682A7D310BF280798B06DE1DC18D457AC80A931C4", 2000, ".epub"));
             bookList.add(new Ebook("Java For Dummies", "For Dummies", 504,
                     "16BC9EF7327955D701A1EBF7E8A1CA413E92A22A0C6F4F865CFF9D46380B5F7C", 3000, ".pdf"));
-            bookList.add(new Ebook("Design Patterns: Elements of Reusable Object-Oriented Software",
+            bookList.add(new Ebook("Elements of Reusable Object-Oriented Software",
                     "Addison-Wesley Professional", 416,
                     "EB1BBEAEDCB50107A55AC049B62384B6A0BCFBF5E2988BEF9536FC5C27404D5A", 6000, ".epub"));
             bookList.add(new Ebook("The Pragmatic Programmer", "Addison-Wesley Professional",

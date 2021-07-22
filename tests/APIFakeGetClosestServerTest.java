@@ -16,36 +16,41 @@ public class APIFakeGetClosestServerTest {
     }
 
     @Test
+    public void testGetServerNullContinent() {
+        Assertions.assertThrows(NullParameterException.class, () -> api.getClosestServer(null));
+    }
+
+    @Test
     public void testGetServerWrongContinent() {
         Assertions.assertThrows(ServerNotFoundException.class, () -> api.getClosestServer("Antartica"));
     }
 
     @Test
-    public void testGetServerEurope() throws ServerNotFoundException {
+    public void testGetServerEurope() throws ServerNotFoundException, NullParameterException {
         Server server = api.getClosestServer("Europe");
         Assertions.assertEquals("Europe", server.getRegion());
     }
 
     @Test
-    public void testGetServerAmerica() throws ServerNotFoundException {
+    public void testGetServerAmerica() throws ServerNotFoundException, NullParameterException {
         Server server = api.getClosestServer("America");
         Assertions.assertEquals("America", server.getRegion());
     }
 
     @Test
-    public void testGetServerAsia() throws ServerNotFoundException {
+    public void testGetServerAsia() throws ServerNotFoundException, NullParameterException {
         Server server = api.getClosestServer("Asia");
         Assertions.assertEquals("Asia", server.getRegion());
     }
 
     @Test
-    public void testGetServerAfrica() throws ServerNotFoundException {
+    public void testGetServerAfrica() throws ServerNotFoundException, NullParameterException {
         Server server = api.getClosestServer("Africa");
         Assertions.assertEquals("Africa", server.getRegion());
     }
 
     @Test
-    public void testGetServerAustralia() throws ServerNotFoundException {
+    public void testGetServerAustralia() throws ServerNotFoundException, NullParameterException {
         Server server = api.getClosestServer("Australia");
         Assertions.assertEquals("Australia", server.getRegion());
     }

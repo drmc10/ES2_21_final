@@ -23,9 +23,58 @@ public class APIFakeReadBookTest {
     }
 
     @Test
+    public void testReadbookUserIdEmpty() {
+        Assertions.assertThrows(MissingUserIdException.class, () -> api.readBook("",
+                new Loan("14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38",14)));
+    }
+
+    @Test
+    public void testReadBookUserIdOk() {
+        inputStream = new ByteArrayInputStream("0\n".getBytes());
+        System.setIn(inputStream);
+       Assertions.assertDoesNotThrow(() -> api.readBook(api.login("testUser1", "testUser1").getId(),
+               new Loan("14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38",14)));
+    }
+
+    @Test
+    public void testReadBookUserIdAbove36() {
+        inputStream = new ByteArrayInputStream("0\n".getBytes());
+        System.setIn(inputStream);
+        Assertions.assertThrows(TooManyCharsException.class, () -> api.readBook("1234567890123456789012345678901234567",
+                new Loan("14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38",14)));
+    }
+
+    @Test
+    public void testReadBookUserIdBellow36() {
+        inputStream = new ByteArrayInputStream("0\n".getBytes());
+        System.setIn(inputStream);
+        Assertions.assertThrows(TooFewCharsException.class, () -> api.readBook("12345678901234567890123456789012345",
+                new Loan("14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38",14)));
+    }
+
+    @Test
+    public void testReadBookUserNull() {
+        inputStream = new ByteArrayInputStream("0\n".getBytes());
+        System.setIn(inputStream);
+        Assertions.assertThrows(NullParameterException.class, () -> api.readBook(
+                null,
+                new Loan("14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38" , 14)));
+    }
+
+    @Test
+    public void testReadBookLoanNull() {
+        inputStream = new ByteArrayInputStream("0\n".getBytes());
+        System.setIn(inputStream);
+        Assertions.assertThrows(NullParameterException.class, () -> api.readBook(
+                null,
+                new Loan("14D740E5C2F9D24616CDE373A5C80245778E53B9D0E9ACA05A9F3C7C328D3D38" , 14)));
+    }
+
+    @Test
     public void testReadBookExitReader() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException, NullParameterException,
+            TooFewCharsException, TooManyCharsException, MissingUserIdException {
         User user = api.login("testUser2", "testUser2");
         inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);
@@ -56,7 +105,8 @@ public class APIFakeReadBookTest {
     @Test
     public void testReadBookBlockedUser() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException, NullParameterException,
+            TooFewCharsException, TooManyCharsException, MissingUserIdException {
         User user = api.login("testUser2", "testUser2");
         System.setIn(new ByteArrayInputStream("1\n".getBytes()));
 
@@ -81,7 +131,8 @@ public class APIFakeReadBookTest {
 
     @Test
     public void testReadBookExpiredLoan() throws UserIsNotActiveException, EmptyUsernameException,
-            UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException {
+            UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException, NullParameterException,
+            TooFewCharsException, TooManyCharsException, MissingUserIdException {
         User user = api.login("testUser1", "testUser1");
         Loan loan = null;
         for (Loan loan1 : user.getLoanList()) {
@@ -101,7 +152,8 @@ public class APIFakeReadBookTest {
     @Test
     public void testReadBookOk() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException, NullParameterException,
+            TooFewCharsException, TooManyCharsException, MissingUserIdException {
         User user = api.login("testUser2", "testUser2");
         System.setIn(new ByteArrayInputStream("1\n".getBytes()));
 
@@ -126,7 +178,8 @@ public class APIFakeReadBookTest {
     @Test
     public void testReadBookNextPageInputError() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException, NullParameterException,
+            TooFewCharsException, TooManyCharsException, MissingUserIdException {
         User user = api.login("testUser2", "testUser2");
         inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);
@@ -169,7 +222,8 @@ public class APIFakeReadBookTest {
     @Test
     public void testReadBookNextPageInputOk() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException, NullParameterException,
+            TooFewCharsException, TooManyCharsException, MissingUserIdException {
         User user = api.login("testUser2", "testUser2");
         inputStream = new ByteArrayInputStream("1\n0\n".getBytes());
         System.setIn(inputStream);
@@ -203,7 +257,8 @@ public class APIFakeReadBookTest {
     @Test
     public void testReadBookPreviousPageInputError() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException, NullParameterException,
+            TooFewCharsException, TooManyCharsException, MissingUserIdException {
         User user = api.login("testUser2", "testUser2");
         inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);
@@ -240,7 +295,8 @@ public class APIFakeReadBookTest {
     @Test
     public void testReadBookPreviousPageInputOk() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException, NullParameterException,
+            TooFewCharsException, TooManyCharsException, MissingUserIdException {
         User user = api.login("testUser2", "testUser2");
         inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);
@@ -281,7 +337,8 @@ public class APIFakeReadBookTest {
     @Test
     public void testReadBookGotoPagePageInputErrorNegativePageNumber() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException, NullParameterException,
+            TooFewCharsException, TooManyCharsException, MissingUserIdException {
         User user = api.login("testUser2", "testUser2");
         inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);
@@ -319,7 +376,8 @@ public class APIFakeReadBookTest {
     @Test
     public void testReadBookGotoPagePageInputErrorPage0() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException, NullParameterException,
+            TooFewCharsException, TooManyCharsException, MissingUserIdException {
         User user = api.login("testUser2", "testUser2");
         inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);
@@ -357,7 +415,8 @@ public class APIFakeReadBookTest {
     @Test
     public void testReadBookGotoPagePageInputErrorAboveMaxPage() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException, NullParameterException,
+            TooFewCharsException, TooManyCharsException, MissingUserIdException {
         User user = api.login("testUser2", "testUser2");
         inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);
@@ -395,7 +454,8 @@ public class APIFakeReadBookTest {
     @Test
     public void testReadBookGotoPagePageInputOk() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException, NullParameterException,
+            TooFewCharsException, TooManyCharsException, MissingUserIdException {
         User user = api.login("testUser2", "testUser2");
         inputStream = new ByteArrayInputStream("1\n".getBytes());
         System.setIn(inputStream);

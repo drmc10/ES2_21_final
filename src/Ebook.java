@@ -8,17 +8,29 @@ public class Ebook {
 
     public Ebook(String title, String publisher, int pages, String hash, int size, String extension)
             throws MissingTitleException, MissingPublisherException, IncorrectPageNumber,
-            InvalidHashException, InvalidFileSizeException, InvalidFileExtension {
+            InvalidHashException, InvalidFileSizeException, InvalidFileExtension, NullParameterException,
+            TooFewCharsException, TooManyCharsException {
+        if(title == null || publisher == null || hash == null || extension == null) {
+            throw new NullParameterException();
+        }
         if(title.isEmpty())
             throw new MissingTitleException();
         if(publisher.isEmpty())
             throw new MissingPublisherException();
-        if(pages <= 0)
+        if(pages <= 0 || pages > 2000)
             throw new IncorrectPageNumber();
         if(hash.length() != 64)
             throw new InvalidHashException();
         if(size <= 0 || size > 100000)
             throw new InvalidFileSizeException();
+        if(title.length() < 5 || publisher.length() < 5)
+            throw new TooFewCharsException();
+        if(title.length() > 50 || publisher.length() > 50)
+            throw new TooManyCharsException();
+        if(extension.length() < 2)
+            throw new TooFewCharsException();
+        if(extension.length() > 5)
+            throw new TooManyCharsException();
 
         switch(extension) {
             case ".pdf":

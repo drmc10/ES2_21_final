@@ -25,6 +25,73 @@ public class APIFakeRequestBookTest {
     }
 
     @Test
+    public void testRequestBookUserIdEmpty() {
+        Assertions.assertThrows(MissingUserIdException.class, () ->
+                api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364", ""));
+    }
+
+    @Test
+    public void testRequestBookHashEmpty() {
+        Assertions.assertThrows(InvalidHashException.class, () ->
+                api.requestBook("", api.login("testUser1", "testUser1").getId()));
+    }
+
+    @Test
+    public void testRequestBookHashNull() {
+        Assertions.assertThrows(NullParameterException.class, () -> api.requestBook(null
+                , api.login("testUser1", "testUser1").getId()));
+    }
+
+    @Test
+    public void testRequestBookUserNull() {
+        Assertions.assertThrows(NullParameterException.class, () ->
+                api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364"
+                , null));
+    }
+
+    @Test
+    public void testRequestBookHashOk() {
+        System.setIn(new ByteArrayInputStream("1\n".getBytes()));
+        Assertions.assertDoesNotThrow(() -> api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364"
+                , api.login("testUser1", "testUser1").getId()));
+    }
+
+    @Test
+    public void testRequestBookHashAbove64() {
+        Assertions.assertThrows(InvalidHashException.class, () ->
+                api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D0845873641"
+                , api.login("testUser1", "testUser1").getId()));
+    }
+
+    @Test
+    public void testRequestBookHashBelow64() {
+        Assertions.assertThrows(InvalidHashException.class, () ->
+                api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D08458736"
+                        , api.login("testUser1", "testUser1").getId()));
+    }
+
+    @Test
+    public void testRequestBookUserIdOk() {
+        System.setIn(new ByteArrayInputStream("1\n".getBytes()));
+        Assertions.assertDoesNotThrow(() -> api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364"
+                        , api.login("testUser1", "testUser1").getId()));
+    }
+
+    @Test
+    public void testRequestBookUserIdBelow36() {
+        Assertions.assertThrows(TooFewCharsException.class, () ->
+                api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364"
+                        , "12345678901234567890123456789012345"));
+    }
+
+    @Test
+    public void testRequestBookUserIdAbove36() {
+        Assertions.assertThrows(TooManyCharsException.class, () ->
+                api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364"
+                        , "1234567890123456789012345678901234567"));
+    }
+
+    @Test
     public void testRequestBookWrongHash() {
         Assertions.assertThrows(BookDoesntExistException.class, () -> api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587363",
                 api.login("testUser1", "testUser1").getId()));
@@ -33,7 +100,7 @@ public class APIFakeRequestBookTest {
     @Test
     public void testRequestBookWrongUser() {
         Assertions.assertThrows(UserDoesntExistException.class, () -> api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364"
-                , "0"));
+                , "123456789012345678901234567890123456"));
     }
 
     @Test
@@ -50,7 +117,8 @@ public class APIFakeRequestBookTest {
     @Test
     public void testRequestBookBlockedUSer() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException,
+            NullParameterException, TooFewCharsException, TooManyCharsException, MissingUserIdException {
         System.setOut(new PrintStream(outputStream));
         api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364",
                 api.login("testUser3", "testUser3").getId());
@@ -63,7 +131,8 @@ public class APIFakeRequestBookTest {
     @Test
     public void testRequestBookAcceptEULA() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException,
+            NullParameterException, TooFewCharsException, TooManyCharsException, MissingUserIdException {
         System.setIn(new ByteArrayInputStream("1\n".getBytes()));
         System.setOut(new PrintStream(outputStream));
         User user = api.login("testUser1", "testUser1");
@@ -89,7 +158,8 @@ public class APIFakeRequestBookTest {
     @Test
     public void testRequestBookDeclineEULA() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException,
+            NullParameterException, TooFewCharsException, TooManyCharsException, MissingUserIdException {
         System.setIn(new ByteArrayInputStream("2\n".getBytes()));
         System.setOut(new PrintStream(outputStream));
         api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364"
@@ -104,7 +174,8 @@ public class APIFakeRequestBookTest {
     @Test
     public void testRequestBookWrongChoice() throws UserIsNotActiveException, EmptyUsernameException,
             UserDoesntExistException, EmptyPasswordException, IncorrectPasswordException,
-            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException {
+            BookAlreadyLoanedException, BookDoesntExistException, RenewLimitExceeded, InvalidHashException,
+            NullParameterException, TooFewCharsException, TooManyCharsException, MissingUserIdException {
         System.setIn(new ByteArrayInputStream("3\n".getBytes()));
         System.setOut(new PrintStream(outputStream));
         api.requestBook("1661041B159552D2C5CEF61974D1A652513D99700F52C9C22CA446D084587364"

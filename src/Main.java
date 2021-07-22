@@ -36,7 +36,7 @@ public class Main {
                 System.out.println("Empty username, please try again");
             } catch (EmptyPasswordException e) {
                 System.out.println("Empty password, please try again");
-            }
+            } catch (NullParameterException | TooFewCharsException | TooManyCharsException ignored) {}
         }
 
         //Menu
@@ -101,7 +101,9 @@ public class Main {
                             System.out.println("Book already in your list");
                         } catch (BookDoesntExistException e) {
                             System.out.println("Book doesn't exist");
-                        } catch (UserDoesntExistException | RenewLimitExceeded | InvalidHashException ignored) {}
+                        } catch (UserDoesntExistException | RenewLimitExceeded | InvalidHashException |
+                                NullParameterException | TooFewCharsException | TooManyCharsException |
+                                MissingUserIdException ignored) {}
                     }
 
                     break;
@@ -178,7 +180,9 @@ public class Main {
                                 if(loan.getBookHash().equals(availableBooks.get(Integer.parseInt(bookChosen) - 1).getHash())) {
                                     try {
                                         server.readBook(currentUser.getId(), loan);
-                                    } catch (UserDoesntExistException ignored) {}
+                                    } catch (UserDoesntExistException | NullParameterException |
+                                            TooFewCharsException | TooManyCharsException |
+                                            MissingUserIdException ignored) {}
                                     break;
                                 }
                             }

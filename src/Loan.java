@@ -1,3 +1,5 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -15,7 +17,7 @@ public class Loan {
         if(bookHash.length() != 64)
             throw new InvalidHashException();
 
-        if(numberOfDays <= 0)
+        if(numberOfDays <= 0 || numberOfDays > 14)
             throw new InvalidNumberOfDaysToLoanException();
 
         //If book doesn't exist, an exception is thrown
@@ -36,17 +38,28 @@ public class Loan {
     }
 
     public Loan(String bookHash, Date currentDate, int numberOfDays) throws BookDoesntExistException, InvalidHashException,
-            InvalidNumberOfDaysToLoanException {
+            InvalidNumberOfDaysToLoanException, NullParameterException, ParseException, InvalidDateException {
         if(bookHash.length() != 64)
             throw new InvalidHashException();
 
-        if(numberOfDays <= 0)
+        if(numberOfDays <= 0 || numberOfDays > 14)
             throw new InvalidNumberOfDaysToLoanException();
+
+        if(currentDate == null)
+            throw new NullParameterException();
+
+        Date date1 = new SimpleDateFormat("dd-MM-yyyy").parse("1970-01-01");
+        Date date2 = new SimpleDateFormat("dd-MM-yyyy").parse("2099-12-31");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date1);
+        calendar.setTime(currentDate);
+
+        if(calendar.get(Calendar.YEAR) < 1970 || calendar.get(Calendar.YEAR) > 2099)
+            throw new InvalidDateException();
 
         //If book doesn't exist, an exception is thrown
         BookDatabase.INSTANCE.getBookByHash(bookHash);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentDate);
         calendar.add(Calendar.DAY_OF_MONTH, -(numberOfDays * 2));
 
         this.bookHash = bookHash;
